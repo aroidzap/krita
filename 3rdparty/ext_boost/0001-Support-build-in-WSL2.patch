@@ -1,5 +1,7 @@
---- build_android.sh	2022-02-23 21:34:59.417370300 +0100
-+++ build_android.sh	2022-02-23 21:34:39.351188000 +0100
+diff --git a/build-android.sh b/build-android.sh
+index 308a4eb..fed08b9 100755
+--- a/build-android.sh
++++ b/build-android.sh
 @@ -563,7 +563,7 @@
    echo "Adding pathname: `dirname $CXXPATH`"
    # `AndroidBinariesPath` could be used by user-config-*.jam
