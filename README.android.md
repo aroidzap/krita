@@ -44,7 +44,7 @@ and pass the required arguments.
 Example:
 
 ```shell
-./androidbuild.sh -p=all --src=${HOME}/repos/krita --build-type=Debug --build-root=${HOME}/repos/krita/android-build --ndk-path=${HOME}/Android/Sdk/ndk-bundle --sdk-path=${HOME}/Android/Sdk --api-level=21 --android-abi=armeabi-v7a
+./androidbuild.sh -p=all --src=${HOME}/repos/krita --build-type=Debug --build-root=${HOME}/repos/krita/android-build --ndk-path=${HOME}/Android/Sdk/ndk-bundle --sdk-path=${HOME}/Android/Sdk --api-level=21 --android-abi=arm64-v8a
 ```
 
 That's all!
