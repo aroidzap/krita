@@ -6,31 +6,33 @@ that it will.
 
 ## Setting up Android SDK and NDK
 
-We right now use Android NDK version `r18b` to do our builds. So,
-I would recommend to use that. Download it from [google's website](https://developer.android.com/ndk/downloads/older_releases.html)
-then extract it.
-
-Next, Android SDK. You can either download Android Studio or just
-the `sdk-tools`. Both could be downloaded from [google's website](https://developer.android.com/studio).
+Android SDK. You can either download Android Studio or just
+the `sdk-tools` (Command line tools) . Both could be downloaded from [google's website](https://developer.android.com/studio).
 
 If you downloaded Android Studio then open SDK manager and download
 `Android SDK Build-Tools`.
 (more info: https://developer.android.com/studio/intro/update#sdk-manager)
 
-If you download just `sdk-tools`, then, extract it and run:
+If you download just `sdk-tools` (Command line tools), then, extract it and run:
 
 ```shell
 cd <extracted-android-sdk-tools>/tools/bin
-./sdkmanager --licenses
-./sdkmanager platform-tools
-./sdkmanager "platforms;android-21"
-./sdkmanager "platforms;android-28"    # for androiddeployqt
-./sdkmanager "build-tools;28.0.2"
+./sdkmanager --sdk_root=${HOME}/Android/Sdk --licenses
+./sdkmanager --sdk_root=${HOME}/Android/Sdk platform-tools
+./sdkmanager --sdk_root=${HOME}/Android/Sdk "platforms;android-21"
+./sdkmanager --sdk_root=${HOME}/Android/Sdk "platforms;android-28"    # for androiddeployqt
+./sdkmanager --sdk_root=${HOME}/Android/Sdk "build-tools;28.0.2"
+./sdkmanager --sdk_root=${HOME}/Android/Sdk ndk-bundle
 ```
 
 If you get some `ClasNotFoundException` it might be because `java`
 version is set to `11`. For `sdkmanager` to work, set it to `8` and
 then run it again.
+
+```
+sudo apt-get install -y openjdk-8-jdk
+sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+```
 
 That's the only dependency we have to manage manually!
 
@@ -42,7 +44,7 @@ and pass the required arguments.
 Example:
 
 ```shell
-./androidbuild.sh -p=all --src=/home/sh_zam/workspace/krita --build-type=Debug --build-root=/home/sh_zam/workspace/build-krita-android --ndk-path=/home/sh_zam/Android/Sdk/ndk-bundle --sdk-path=/home/sh_zam/Android/Sdk --api-level=21 --android-abi=armeabi-v7a
+./androidbuild.sh -p=all --src=${HOME}/repos/krita --build-type=Debug --build-root=${HOME}/repos/krita/android-build --ndk-path=${HOME}/Android/Sdk/ndk-bundle --sdk-path=${HOME}/Android/Sdk --api-level=21 --android-abi=armeabi-v7a
 ```
 
 That's all!
