@@ -83,6 +83,7 @@ public:
     int maxTouchPoints{0};
     int matchingIteration{0};
     bool isTouchDragDetected {false};
+    bool isTouchHoldDetected {false};
     QScopedPointer<QEvent> bestCandidateTouchEvent;
 
     std::function<KisInputActionGroupsMask()> actionGroupMask;
@@ -383,6 +384,7 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
     m_d->maxTouchPoints = event->touchPoints().size();
     m_d->matchingIteration = 1;
     m_d->isTouchDragDetected = false;
+    m_d->isTouchHoldDetected = false;
     KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateTouchEvent);
 
     return !notifier.isInRecursion();
@@ -403,7 +405,7 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
 
         // if the drag is detected, until the next TouchBegin even, we'll be assuming the gesture to be of dragging
         // type.
-        m_d->isTouchDragDetected = abs(delta.x()) > touchSlop || abs(delta.y()) > touchSlop;
+        m_d->isTouchDragDetected = pow(delta.x(), 2) + pow(delta.y(), 2) > touchSlop * touchSlop;
     }
 
     // for a first few events we don't process the events right away. But analyze and keep track of the event with most
@@ -412,12 +414,13 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
     const int numIterations = 10;
     if (m_d->matchingIteration <= numIterations && !m_d->isTouchDragDetected) {
         m_d->matchingIteration++;
+        m_d->isTouchHoldDetected = !m_d->isTouchDragDetected && m_d->matchingIteration > numIterations;
         setMaxTouchPointEvent(event);
         DEBUG_TOUCH_ACTION("return best", event)
         return matchTouchShortcut((QTouchEvent *)m_d->bestCandidateTouchEvent.data());
     }
 
-    if (m_d->isTouchDragDetected) {
+    if (m_d->isTouchDragDetected || m_d->isTouchHoldDetected) {
         if (m_d->touchShortcut && !m_d->touchShortcut->matchDragType(event)) {
             DEBUG_TOUCH_ACTION("ending", event)
             // we should end the event as an event with more touchpoints was received
@@ -875,7 +878,8 @@ KisTouchShortcut *KisShortcutMatcher::matchTouchShortcut(QTouchEvent *event)
         // with tap type.
         if (shortcut->isAvailable(m_d->actionGroupMask())
             && ((shortcut->matchDragType(event) && m_d->isTouchDragDetected)
-                || (shortcut->matchTapType(event) && !m_d->isTouchDragDetected))
+                || (shortcut->matchHoldType(event) && m_d->isTouchHoldDetected)
+                || (shortcut->matchTapType(event) && !(m_d->isTouchDragDetected || m_d->isTouchHoldDetected)))
             && (!goodCandidate || shortcut->priority() > goodCandidate->priority())) {
 
             goodCandidate = shortcut;

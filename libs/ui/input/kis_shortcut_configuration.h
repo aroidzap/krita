@@ -72,6 +72,11 @@ public:
         ThreeFingerDrag,
         FourFingerDrag,
         FiveFingerDrag,
+        OneFingerHold,
+        TwoFingerHold,
+        ThreeFingerHold,
+        FourFingerHold,
+        FiveFingerHold,
 #endif
         MaxGesture,
     };

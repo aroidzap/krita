@@ -70,6 +70,15 @@ bool KisTouchShortcut::matchDragType(QTouchEvent *event)
         ;
 }
 
+bool KisTouchShortcut::matchHoldType(QTouchEvent *event)
+{
+    return matchTouchPoint(event)
+#ifndef Q_OS_MACOS
+        && (d->type >= KisShortcutConfiguration::OneFingerHold && d->type <= KisShortcutConfiguration::FiveFingerHold)
+#endif
+        ;
+}
+
 bool KisTouchShortcut::matchTouchPoint(QTouchEvent *event)
 {
     return event->touchPoints().count() >= d->minTouchPoints && event->touchPoints().count() <= d->maxTouchPoints;
