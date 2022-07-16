@@ -132,6 +132,7 @@ KisInputActionGroup KisZoomAndRotateAction::inputActionGroup(int shortcut) const
 qreal KisZoomAndRotateAction::canvasRotationAngle(QPointF p0, QPointF p1)
 {
     const QPointF slope = p1 - p0;
+    const float currentDistance = QLineF(p0, p1).length();
     const qreal currentAngle = std::atan2(slope.y(), slope.x());
 
     switch (d->shortcutIndex) {
@@ -147,8 +148,11 @@ qreal KisZoomAndRotateAction::canvasRotationAngle(QPointF p0, QPointF p1)
         KisCanvasController *controller = static_cast<KisCanvasController *>(canvas->canvasController());
         const qreal canvasAnglePostRotation = controller->rotation() + rotationAngle;
         const qreal snapDelta = angleForSnapping(canvasAnglePostRotation);
+        // stronger snap when fingers are close, no snap when fingers are far from each other
+        const qreal maxSnapDelta = (200.0 - currentDistance) / 5.0;
+        maxSnapDelta = std::max(0, std::min(45, maxSnapDelta));
         // we snap the canvas to an angle that is a multiple of 45
-        if (abs(snapDelta) <= 2 && abs(d->accumRotationAngle) <= 2) {
+        if (abs(snapDelta) <= maxSnapDelta && abs(d->accumRotationAngle) <= maxSnapDelta) {
             // accumulate the relative angle of finger from the point when we started snapping
             d->accumRotationAngle += rotationAngle;
             rotationAngle = rotationAngle - snapDelta;
