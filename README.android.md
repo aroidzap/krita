@@ -1,4 +1,8 @@
-# Building Krita for Android
+# Building Krita for Android (Using Docker)
+- Download and install [Docker](https://www.docker.com/products/docker-desktop)
+- See `android.Dockerfile`
+
+# Building Krita for Android (Using Linux)
 
 First of all, I use linux to do my builds and testing. Although,
 they _should_ work on Windows/macOS, I cannot give any guarantee 
