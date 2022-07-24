@@ -720,7 +720,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
                 ||  qAbs(currentPos.y() - d->previousPos.y()) > 1)))
             {
                 d->previousPos = currentPos;
-                if (!d->buttonPressed)
+                if (!d->buttonPressed && !KisConfig(true).disableTouchOnUI())
                 {
                     // we start it here not in TouchBegin, because Qt::TouchPointStationary doesn't work with hpdi devices.
                     retval = d->matcher.buttonPressed(Qt::LeftButton, d->originatingTouchBeginEvent.data());

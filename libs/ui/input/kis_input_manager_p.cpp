@@ -577,12 +577,15 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
     case KisShortcutConfiguration::UpperRightCornerHold:
     case KisShortcutConfiguration::LowerLeftCornerHold:
     case KisShortcutConfiguration::LowerRightCornerHold:
-    case KisShortcutConfiguration::OneFingerTap:
     case KisShortcutConfiguration::OneFingerHold:
+        shortcut->setMinimumTouchPoints(1);
+        shortcut->setMaximumTouchPoints(1);
+        break;
+    case KisShortcutConfiguration::OneFingerTap:
     case KisShortcutConfiguration::OneFingerDrag:
     case KisShortcutConfiguration::OneFingerDragHorizontal:
     case KisShortcutConfiguration::OneFingerDragVertical:
-        // Allow single finger panning if touch drawing is disabled
+        // Allow single finger tap and drag shortcuts if touch drawing is disabled
         if (KisConfig(true).disableTouchOnCanvas()) { 
             shortcut->setMinimumTouchPoints(1);
             shortcut->setMaximumTouchPoints(1);

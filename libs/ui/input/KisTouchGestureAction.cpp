@@ -20,8 +20,10 @@ KisTouchGestureAction::KisTouchGestureAction()
     QHash<QString, int> shortcuts;
     shortcuts.insert(i18n("Undo"), UndoActionShortcut);
     shortcuts.insert(i18n("Redo"), RedoActionShortcut);
-    shortcuts.insert(i18n("Toggle Canvas Only Mode"), ToggleCanvasOnlyShortcut);
     shortcuts.insert(i18n("Toggle Eraser"), ToggleEraserMode);
+    shortcuts.insert(i18n("Toggle Canvas Only Mode"), ToggleCanvasOnlyShortcut);
+    shortcuts.insert(i18n("Toggle Block UI Touch"), ToggleBlockUITouch);
+    
     setShortcutIndexes(shortcuts);
 }
 
@@ -50,6 +52,13 @@ void KisTouchGestureAction::end(QEvent *event)
         }
         break;
     }
+    case ToggleEraserMode: {
+        QAction *action = actionCollection->action("erase_action");
+        if (action) {
+            action->trigger();
+        }
+        break;
+    }
     case ToggleCanvasOnlyShortcut: {
         QAction *action = actionCollection->action("view_show_canvas_only");
         if (action) {
@@ -57,8 +66,8 @@ void KisTouchGestureAction::end(QEvent *event)
         }
         break;
     }
-    case ToggleEraserMode: {
-        QAction *action = actionCollection->action("erase_action");
+    case ToggleBlockUITouch: {
+        QAction *action = actionCollection->action("settings_block_ui_touch");
         if (action) {
             action->trigger();
         }

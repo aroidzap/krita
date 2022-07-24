@@ -712,6 +712,10 @@ void KisViewManager::createActions()
     tAction->setChecked(cfg.showStatusBar());
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
+    tAction = actionManager()->createAction("settings_block_ui_touch");
+    tAction->setChecked(false);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(switchBlockUITouch(bool)));
+
     tAction = actionManager()->createAction("view_show_canvas_only");
     tAction->setChecked(false);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(switchCanvasOnly(bool)));
@@ -1168,6 +1172,12 @@ void KisViewManager::showStatusBar(bool toggled)
         KisConfig cfg(false);
         cfg.setShowStatusBar(toggled);
     }
+}
+
+void KisViewManager::switchBlockUITouch(bool toggled)
+{
+    KisConfig cfg(false);
+    cfg.setDisableTouchOnIU(toggled);
 }
 
 void KisViewManager::switchCanvasOnly(bool toggled)

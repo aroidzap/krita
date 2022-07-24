@@ -15,8 +15,9 @@ public:
     enum Shortcut {
         UndoActionShortcut,
         RedoActionShortcut,
-        ToggleCanvasOnlyShortcut,
         ToggleEraserMode,
+        ToggleCanvasOnlyShortcut,
+        ToggleBlockUITouch,
     };
 
     KisTouchGestureAction();

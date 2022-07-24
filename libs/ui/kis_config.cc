@@ -106,6 +106,16 @@ void KisConfig::logImportantSettings() const
     KisUsageLogger::writeSysInfo("\n");
 }
 
+bool KisConfig::disableTouchOnUI(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("disableTouchOnUI", false));
+}
+
+void KisConfig::setDisableTouchOnUI(bool value) const
+{
+    m_cfg.writeEntry("disableTouchOnUI", value);
+}
+
 bool KisConfig::disableTouchOnCanvas(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("disableTouchOnCanvas", false));

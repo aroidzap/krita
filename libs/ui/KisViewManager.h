@@ -196,6 +196,7 @@ public:
 
 public Q_SLOTS:
 
+    void switchBlockUITouch(bool toggled);
     void switchCanvasOnly(bool toggled);
     void setShowFloatingMessage(bool show);
     void showHideScrollbars();
