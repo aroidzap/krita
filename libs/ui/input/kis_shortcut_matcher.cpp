@@ -430,7 +430,10 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
     }
 
     if (m_d->isTouchDragDetected || m_d->isTouchHoldDetected) {
-        if (m_d->touchShortcut && !m_d->touchShortcut->matchDragType(event)) {
+        if (m_d->touchShortcut && !m_d->touchShortcut->matchType(event, 
+                /*isTap*/ false, /*isHold*/ true, /*isDrag*/ true,
+                /*isHorizontalDrag*/ true, /*isVerticalDrag*/ true))
+        {
             DEBUG_TOUCH_ACTION("ending", event)
             // we should end the event as an event with more touchpoints was received
             retval = tryEndTouchShortcut(event);

@@ -42,8 +42,8 @@ public Q_SLOTS:
     void logImportantSettings() const;
 public:
 
-    bool disableTouchOnIU(bool defaultValue = false) const;
-    void setDisableTouchOnIU(bool value) const;
+    bool disableTouchOnUI(bool defaultValue = false) const;
+    void setDisableTouchOnUI(bool value) const;
 
     bool disableTouchOnCanvas(bool defaultValue = false) const;
     void setDisableTouchOnCanvas(bool value) const;

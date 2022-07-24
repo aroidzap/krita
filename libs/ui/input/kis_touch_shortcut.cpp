@@ -9,7 +9,11 @@
 #include "kis_touch_shortcut.h"
 #include "kis_abstract_input_action.h"
 
+#include <QGuiApplication>
 #include <QTouchEvent>
+#include <QScreen>
+#include <QWindow>
+#include <QLine>
 
 class KisTouchShortcut::Private
 {
@@ -52,7 +56,7 @@ void KisTouchShortcut::setMaximumTouchPoints(int max)
     d->maxTouchPoints = max;
 }
 
-bool matchType(QTouchEvent *event, 
+bool KisTouchShortcut::matchType(QTouchEvent *event,
     bool isTap, bool isHold, bool isDrag, 
     bool isHorizontalDrag, bool isVerticalDrag)
 {
@@ -64,19 +68,20 @@ bool matchType(QTouchEvent *event,
         bool match = false;
         if ((isTap || isHold) && event->touchPoints().count()) 
         {
-            const cornerTouchDist = 0.5 * QScreen::physicalDotsPerInch;
-            QPointF touchPos = event->touchPoints().front().startScenePos();
-            float width = static_cast<float>(event->window().width);
-            float height = static_cast<float>(event->window().height);
+            const float dpi = QGuiApplication::primaryScreen()->physicalDotsPerInch();
+            const float cornerTouchDist = 0.5 * dpi;
+            QPointF touchPos = event->touchPoints().front().startPos();
+            float width = static_cast<float>(event->window()->width());
+            float height = static_cast<float>(event->window()->height());
 
-            if (QLineF(touchPos, {0.f, 0.f}).length() < cornerTouchDist) {
-                match |= isTap && KSC::UpperLeftCornerTap || isHold && KSC::UpperLeftCornerHold;
-            } else if (QLineF(touchPos, {0.f, width}).length() < cornerTouchDist) {
-                match |= isTap && KSC::UpperRightCornerTap || isHold && KSC::UpperRightCornerHold;
-            } else if (QLineF(touchPos, {height, 0.f}).length() < cornerTouchDist) {
-                match |= isTap && KSC::LowerLeftCornerTap || isHold && KSC::LowerLeftCornerHold;
-            } else if (QLineF(touchPos, {height, width}).length() < cornerTouchDist) {
-                match |= isTap && KSC::LowerRightCornerTap || isHold && KSC::LowerRightCornerHold;
+            if (QLineF(touchPos, QPointF{0.f, 0.f}).length() < cornerTouchDist) {
+                match |= isTap && d->type == KSC::UpperLeftCornerTap || isHold && d->type == KSC::UpperLeftCornerHold;
+            } else if (QLineF(touchPos, QPointF{0.f, width}).length() < cornerTouchDist) {
+                match |= isTap && d->type == KSC::UpperRightCornerTap || isHold && d->type == KSC::UpperRightCornerHold;
+            } else if (QLineF(touchPos, QPointF{height, 0.f}).length() < cornerTouchDist) {
+                match |= isTap && d->type == KSC::LowerLeftCornerTap || isHold && d->type == KSC::LowerLeftCornerHold;
+            } else if (QLineF(touchPos, QPointF{height, width}).length() < cornerTouchDist) {
+                match |= isTap && d->type == KSC::LowerRightCornerTap || isHold && d->type == KSC::LowerRightCornerHold;
             }
         }
         match |= isTap && 

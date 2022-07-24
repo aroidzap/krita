@@ -1177,7 +1177,7 @@ void KisViewManager::showStatusBar(bool toggled)
 void KisViewManager::switchBlockUITouch(bool toggled)
 {
     // read only, we dont want to accidentaly disable touch and be unable to revert it
-    KisConfig(true).setDisableTouchOnIU(toggled);
+    KisConfig(true).setDisableTouchOnUI(toggled);
 }
 
 void KisViewManager::switchCanvasOnly(bool toggled)

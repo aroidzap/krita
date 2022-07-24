@@ -5,9 +5,11 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QGuiApplication>
 #include <QApplication>
 #include <QTouchEvent>
 #include <QScreen>
+#include <QLine>
 
 #include <klocalizedstring.h>
 #include <kis_canvas_controller.h>
@@ -133,8 +135,7 @@ KisInputActionGroup KisZoomAndRotateAction::inputActionGroup(int shortcut) const
 qreal KisZoomAndRotateAction::canvasRotationAngle(QPointF p0, QPointF p1)
 {
     const QPointF slope = p1 - p0;
-    const float currentDistanceInch = 
-        QScreen::physicalDotsPerInch * QLineF(p0, p1).length();
+    const float currentDistance = QLineF(p0, p1).length();
     const qreal currentAngle = std::atan2(slope.y(), slope.x());
 
     switch (d->shortcutIndex) {
@@ -151,8 +152,9 @@ qreal KisZoomAndRotateAction::canvasRotationAngle(QPointF p0, QPointF p1)
         const qreal canvasAnglePostRotation = controller->rotation() + rotationAngle;
         const qreal snapDelta = angleForSnapping(canvasAnglePostRotation);
         // stronger snap when fingers are close, no snap when fingers are far from each other
-        const qreal maxSnapDelta = 60 * (1.0 - currentDistanceInch);
-        maxSnapDelta = std::max(0, std::min(45, maxSnapDelta));
+        const float dpi = QGuiApplication::primaryScreen()->physicalDotsPerInch();
+        qreal maxSnapDelta = 60 * (1.0 - currentDistance / dpi);
+        maxSnapDelta = qMax(0.0, qMin(45.0, maxSnapDelta));
         // we snap the canvas to an angle that is a multiple of 45
         if (abs(snapDelta) <= maxSnapDelta && abs(d->accumRotationAngle) <= maxSnapDelta) {
             // accumulate the relative angle of finger from the point when we started snapping
