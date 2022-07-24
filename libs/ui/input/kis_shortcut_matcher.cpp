@@ -83,6 +83,8 @@ public:
     int maxTouchPoints{0};
     int matchingIteration{0};
     bool isTouchDragDetected {false};
+    bool isTouchDragHorizontalDetected {false};
+    bool isTouchDragVerticalDetected {false};
     bool isTouchHoldDetected {false};
     QScopedPointer<QEvent> bestCandidateTouchEvent;
 
@@ -384,6 +386,8 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
     m_d->maxTouchPoints = event->touchPoints().size();
     m_d->matchingIteration = 1;
     m_d->isTouchDragDetected = false;
+    m_d->isTouchDragHorizontalDetected = false;
+    m_d->isTouchDragVerticalDetected = false;
     m_d->isTouchHoldDetected = false;
     KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateTouchEvent);
 
@@ -405,7 +409,12 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
 
         // if the drag is detected, until the next TouchBegin even, we'll be assuming the gesture to be of dragging
         // type.
-        m_d->isTouchDragDetected = pow(delta.x(), 2) + pow(delta.y(), 2) > touchSlop * touchSlop;
+        m_d->isTouchDragHorizontalDetected = delta.x() > touchSlop;
+        m_d->isTouchDragVerticalDetected = delta.y() > touchSlop;
+        m_d->isTouchDragDetected = 
+            m_d->isTouchDragHorizontalDetected ||
+            m_d->isTouchDragVerticalDetected ||
+            pow(delta.x(), 2) + pow(delta.y(), 2) > touchSlop * touchSlop;
     }
 
     // for a first few events we don't process the events right away. But analyze and keep track of the event with most
@@ -877,9 +886,12 @@ KisTouchShortcut *KisShortcutMatcher::matchTouchShortcut(QTouchEvent *event)
         // if the type of the action is drag, check if we match with drag type and if the type is tap, check if we match
         // with tap type.
         if (shortcut->isAvailable(m_d->actionGroupMask())
-            && ((shortcut->matchDragType(event) && m_d->isTouchDragDetected)
-                || (shortcut->matchHoldType(event) && m_d->isTouchHoldDetected)
-                || (shortcut->matchTapType(event) && !(m_d->isTouchDragDetected || m_d->isTouchHoldDetected)))
+            && shortcut->matchType(event, 
+                /*isTap*/ !(m_d->isTouchDragDetected || m_d->isTouchHoldDetected),
+                /*isHold*/ m_d->isTouchHoldDetected,
+                /*isDrag*/ m_d->isTouchDragDetected,
+                /*isHorizontalDrag*/ m_d->isTouchDragHorizontalDetected,
+                /*isVerticalDrag*/ m_d->isTouchDragVerticalDetected)
             && (!goodCandidate || shortcut->priority() > goodCandidate->priority())) {
 
             goodCandidate = shortcut;

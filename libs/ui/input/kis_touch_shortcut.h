@@ -31,9 +31,9 @@ class KisTouchShortcut : public KisAbstractShortcut
         void setMinimumTouchPoints( int min );
         void setMaximumTouchPoints( int max );
 
-        bool matchTapType(QTouchEvent *event);
-        bool matchDragType(QTouchEvent *event);
-        bool matchHoldType(QTouchEvent *event);
+        bool matchType(QTouchEvent *event, 
+            bool isTap, bool isHold, bool isDrag, 
+            bool isHorizontalDrag, bool isVerticalDrag);
         bool matchTouchPoint(QTouchEvent *event);
 
     private:

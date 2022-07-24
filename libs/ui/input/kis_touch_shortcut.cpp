@@ -52,31 +52,48 @@ void KisTouchShortcut::setMaximumTouchPoints(int max)
     d->maxTouchPoints = max;
 }
 
-bool KisTouchShortcut::matchTapType(QTouchEvent *event)
+bool matchType(QTouchEvent *event, 
+    bool isTap, bool isHold, bool isDrag, 
+    bool isHorizontalDrag, bool isVerticalDrag)
 {
-    return matchTouchPoint(event)
-#ifndef Q_OS_MACOS
-        && (d->type >= KisShortcutConfiguration::OneFingerTap && d->type <= KisShortcutConfiguration::FiveFingerTap)
-#endif
-        ;
-}
+#ifdef Q_OS_MACOS
+    return matchTouchPoint(event);
+#else
+    if (matchTouchPoint(event)) {
+        using KSC = KisShortcutConfiguration;
+        bool match = false;
+        if ((isTap || isHold) && event->touchPoints().count()) 
+        {
+            const cornerTouchDist = 0.5 * QScreen::physicalDotsPerInch;
+            QPointF touchPos = event->touchPoints().front().startScenePos();
+            float width = static_cast<float>(event->window().width);
+            float height = static_cast<float>(event->window().height);
 
-bool KisTouchShortcut::matchDragType(QTouchEvent *event)
-{
-    return matchTouchPoint(event)
-#ifndef Q_OS_MACOS
-        && (d->type >= KisShortcutConfiguration::OneFingerDrag && d->type <= KisShortcutConfiguration::FiveFingerDrag)
+            if (QLineF(touchPos, {0.f, 0.f}).length() < cornerTouchDist) {
+                match |= isTap && KSC::UpperLeftCornerTap || isHold && KSC::UpperLeftCornerHold;
+            } else if (QLineF(touchPos, {0.f, width}).length() < cornerTouchDist) {
+                match |= isTap && KSC::UpperRightCornerTap || isHold && KSC::UpperRightCornerHold;
+            } else if (QLineF(touchPos, {height, 0.f}).length() < cornerTouchDist) {
+                match |= isTap && KSC::LowerLeftCornerTap || isHold && KSC::LowerLeftCornerHold;
+            } else if (QLineF(touchPos, {height, width}).length() < cornerTouchDist) {
+                match |= isTap && KSC::LowerRightCornerTap || isHold && KSC::LowerRightCornerHold;
+            }
+        }
+        match |= isTap && 
+            d->type >= KSC::OneFingerTap && d->type <= KSC::OneFingerTap;
+        match |= isHold && 
+            d->type >= KSC::OneFingerHold && d->type <= KSC::OneFingerHold;
+        match |= isDrag && 
+            d->type >= KSC::OneFingerDrag && d->type <= KSC::FiveFingerDrag;
+        match |= isHorizontalDrag && 
+            d->type >= KSC::OneFingerDragHorizontal && d->type <= KSC::FiveFingerDragHorizontal;
+        match |= isVerticalDrag && 
+            d->type >= KSC::OneFingerDragVertical && d->type <= KSC::FiveFingerDragVertical;
+        return match;
+    } else {
+        return false;
+    }
 #endif
-        ;
-}
-
-bool KisTouchShortcut::matchHoldType(QTouchEvent *event)
-{
-    return matchTouchPoint(event)
-#ifndef Q_OS_MACOS
-        && (d->type >= KisShortcutConfiguration::OneFingerHold && d->type <= KisShortcutConfiguration::FiveFingerHold)
-#endif
-        ;
 }
 
 bool KisTouchShortcut::matchTouchPoint(QTouchEvent *event)

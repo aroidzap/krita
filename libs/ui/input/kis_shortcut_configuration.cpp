@@ -414,6 +414,24 @@ QString KisShortcutConfiguration::gestureToText(GestureAction action)
     case SmartZoomGesture:
         return i18n("Smart Zoom Gesture");
 #else
+    case UpperLeftCornerTap:
+        return i18n("Upper Left Corner Tap");
+    case UpperRightCornerTap:
+        return i18n("Upper Right Corner Tap");
+    case LowerLeftCornerTap:
+        return i18n("Lower Left Corner Tap");
+    case LowerRightCornerTap:
+        return i18n("Lower Right Corner Tap");
+
+    case UpperLeftCornerHold:
+        return i18n("Upper Left Corner Hold");
+    case UpperRightCornerHold:
+        return i18n("Upper Right Corner Hold");
+    case LowerLeftCornerHold:
+        return i18n("Lower Left Corner Hold");
+    case LowerRightCornerHold:
+        return i18n("Lower Right Corner Hold");
+
     case OneFingerTap:
         return i18n("One Finger Tap");
     case TwoFingerTap:
@@ -424,16 +442,7 @@ QString KisShortcutConfiguration::gestureToText(GestureAction action)
         return i18n("Four Finger Tap");
     case FiveFingerTap:
         return i18n("Five Finger Tap");
-    case OneFingerDrag:
-        return i18n("One Finger Drag");
-    case TwoFingerDrag:
-        return i18n("Two Finger Drag");
-    case ThreeFingerDrag:
-        return i18n("Three Finger Drag");
-    case FourFingerDrag:
-        return i18n("Four Finger Drag");
-    case FiveFingerDrag:
-        return i18n("Five Finger Drag");
+
     case OneFingerHold:
         return i18n("One Finger Hold");
     case TwoFingerHold:
@@ -444,6 +453,39 @@ QString KisShortcutConfiguration::gestureToText(GestureAction action)
         return i18n("Four Finger Hold");
     case FiveFingerHold:
         return i18n("Five Finger Hold");
+
+    case OneFingerDrag:
+        return i18n("One Finger Drag");
+    case TwoFingerDrag:
+        return i18n("Two Finger Drag");
+    case ThreeFingerDrag:
+        return i18n("Three Finger Drag");
+    case FourFingerDrag:
+        return i18n("Four Finger Drag");
+    case FiveFingerDrag:
+        return i18n("Five Finger Drag");
+
+    case OneFingerDragHorizontal:
+        return i18n("One Finger Drag Horizontal");
+    case TwoFingerDragHorizontal:
+        return i18n("Two Finger Drag Horizontal");
+    case ThreeFingerDragHorizontal:
+        return i18n("Three Finger Drag Horizontal");
+    case FourFingerDragHorizontal:
+        return i18n("Four Finger Drag Horizontal");
+    case FiveFingerDragHorizontal:
+        return i18n("Five Finger Drag Horizontal");
+
+    case OneFingerDragVertical:
+        return i18n("One Finger Drag Vertical");
+    case TwoFingerDragVertical:
+        return i18n("Two Finger Drag Vertical");
+    case ThreeFingerDragVertical:
+        return i18n("Three Finger Drag Vertical");
+    case FourFingerDragVertical:
+        return i18n("Four Finger Drag Vertical");
+    case FiveFingerDragVertical:
+        return i18n("Five Finger Drag Vertical");
 #endif
     default:
         return i18n("No Gesture");

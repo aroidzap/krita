@@ -569,8 +569,18 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
     dbgKrita << "TouchAction:" << action->name();
     switch(gesture) {
 #ifndef Q_OS_MACOS
+    case KisShortcutConfiguration::UpperLeftCornerTap:
+    case KisShortcutConfiguration::UpperRightCornerTap:
+    case KisShortcutConfiguration::LowerLeftCornerTap:
+    case KisShortcutConfiguration::LowerRightCornerTap:
+    case KisShortcutConfiguration::UpperLeftCornerHold:
+    case KisShortcutConfiguration::UpperRightCornerHold:
+    case KisShortcutConfiguration::LowerLeftCornerHold:
+    case KisShortcutConfiguration::LowerRightCornerHold:
     case KisShortcutConfiguration::OneFingerTap:
     case KisShortcutConfiguration::OneFingerDrag:
+    case KisShortcutConfiguration::OneFingerDragHorizontal:
+    case KisShortcutConfiguration::OneFingerDragVertical:
         // Allow single finger panning if touch drawing is disabled
         if (KisConfig(true).disableTouchOnCanvas()) { 
             shortcut->setMinimumTouchPoints(1);
@@ -579,21 +589,29 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
         break;
     case KisShortcutConfiguration::TwoFingerTap:
     case KisShortcutConfiguration::TwoFingerDrag:
+    case KisShortcutConfiguration::TwoFingerDragHorizontal:
+    case KisShortcutConfiguration::TwoFingerDragVertical:
         shortcut->setMinimumTouchPoints(2);
         shortcut->setMaximumTouchPoints(2);
         break;
     case KisShortcutConfiguration::ThreeFingerTap:
     case KisShortcutConfiguration::ThreeFingerDrag:
+    case KisShortcutConfiguration::ThreeFingerDragHorizontal:
+    case KisShortcutConfiguration::ThreeFingerDragVertical:
         shortcut->setMinimumTouchPoints(3);
         shortcut->setMaximumTouchPoints(3);
         break;
     case KisShortcutConfiguration::FourFingerTap:
     case KisShortcutConfiguration::FourFingerDrag:
+    case KisShortcutConfiguration::FourFingerDragHorizontal:
+    case KisShortcutConfiguration::FourFingerDragVertical:
         shortcut->setMinimumTouchPoints(4);
         shortcut->setMaximumTouchPoints(4);
         break;
     case KisShortcutConfiguration::FiveFingerTap:
     case KisShortcutConfiguration::FiveFingerDrag:
+    case KisShortcutConfiguration::FiveFingerDragHorizontal:
+    case KisShortcutConfiguration::FiveFingerDragVertical:
         shortcut->setMinimumTouchPoints(5);
         shortcut->setMaximumTouchPoints(5);
 #endif
