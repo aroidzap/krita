@@ -578,6 +578,7 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
     case KisShortcutConfiguration::LowerLeftCornerHold:
     case KisShortcutConfiguration::LowerRightCornerHold:
     case KisShortcutConfiguration::OneFingerTap:
+    case KisShortcutConfiguration::OneFingerHold:
     case KisShortcutConfiguration::OneFingerDrag:
     case KisShortcutConfiguration::OneFingerDragHorizontal:
     case KisShortcutConfiguration::OneFingerDragVertical:
@@ -588,6 +589,7 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
         }
         break;
     case KisShortcutConfiguration::TwoFingerTap:
+    case KisShortcutConfiguration::TwoFingerHold:
     case KisShortcutConfiguration::TwoFingerDrag:
     case KisShortcutConfiguration::TwoFingerDragHorizontal:
     case KisShortcutConfiguration::TwoFingerDragVertical:
@@ -595,6 +597,7 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
         shortcut->setMaximumTouchPoints(2);
         break;
     case KisShortcutConfiguration::ThreeFingerTap:
+    case KisShortcutConfiguration::ThreeFingerHold:
     case KisShortcutConfiguration::ThreeFingerDrag:
     case KisShortcutConfiguration::ThreeFingerDragHorizontal:
     case KisShortcutConfiguration::ThreeFingerDragVertical:
@@ -602,6 +605,7 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
         shortcut->setMaximumTouchPoints(3);
         break;
     case KisShortcutConfiguration::FourFingerTap:
+    case KisShortcutConfiguration::FourFingerHold:
     case KisShortcutConfiguration::FourFingerDrag:
     case KisShortcutConfiguration::FourFingerDragHorizontal:
     case KisShortcutConfiguration::FourFingerDragVertical:
@@ -609,6 +613,7 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
         shortcut->setMaximumTouchPoints(4);
         break;
     case KisShortcutConfiguration::FiveFingerTap:
+    case KisShortcutConfiguration::FiveFingerHold:
     case KisShortcutConfiguration::FiveFingerDrag:
     case KisShortcutConfiguration::FiveFingerDragHorizontal:
     case KisShortcutConfiguration::FiveFingerDragVertical:
